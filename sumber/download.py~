@@ -1,0 +1,35 @@
+import sys
+import os
+
+try:
+	skripsi_id = sys.argv[1]
+	kode = sys.argv[2]
+except IndexError:
+	print "You must specify skripsi id"
+	sys.exit(0)
+
+downloader = 'aria2c'
+base_url = 'http://repository.upi.edu/operator/upload/s_%s_%s_' % (kode, skripsi_id)
+
+
+toc_text = 'table_of_content'
+bib_text = 'bibliography'
+chapter_text = 'chapter'
+extention = '.pdf'
+
+print 'making directory %s....' % skripsi_id
+os.system('mkdir %s' % skripsi_id)
+print 'directory succesfully created...'
+
+print 'downloading skripsi with #id = %s into direktori %s' % (skripsi_id, skripsi_id)
+
+
+os.system(downloader + ' ' + base_url + toc_text + extention)
+for i in (1,2,5):
+	os.system(downloader + ' ' + base_url + chapter_text + str(i) + extention)
+
+os.system(downloader + ' ' + base_url + bib_text + extention)
+
+os.system('mv *.pdf %s' % skripsi_id)
+
+print 'download completed'
